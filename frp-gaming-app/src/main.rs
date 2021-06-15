@@ -35,10 +35,6 @@ fn main() {
         }
     });
 
-    timer.delta_elapsed.listen(|elapsed: &Duration| {
-        println!("{:?}", elapsed);
-    });
-
     let drawer_command = create_drawer_command(&event, &timer);
 
     received_character.listen(|c: &char| {

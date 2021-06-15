@@ -53,21 +53,18 @@ where
         let drawers = Command::accum_command_stream(&output.drawer_command);
         let event_emitters = Command::accum_command_stream(&output.event_emiiter_command);
 
-        let control_flow_cell = output.control_flow.hold(ControlFlow::Wait);
+        let control_flow_cell = output.control_flow.hold(ControlFlow::Poll);
 
         let mut frame_count = 0;
         event_loop.run(move |event, _, control_flow| {
             match &event {
                 Event::RedrawRequested(_) => {
-                    println!("RedrawRequested");
                     let drawers = drawers.sample();
                     let mut frame = display.draw();
                     for drawer in drawers {
                         drawer.call(&mut frame)
                     }
                     frame.finish().unwrap();
-
-                    display.gl_window().window().request_redraw();
                 }
                 Event::RedrawEventsCleared => {
                     frame_count += 1;
@@ -79,6 +76,8 @@ where
                 Event::MainEventsCleared => {
                     input.timer.time_sink.send(Instant::now());
                     input.timer.tick_sink.send(frame_count);
+
+                    display.gl_window().window().request_redraw();
                 }
                 _ => {}
             }

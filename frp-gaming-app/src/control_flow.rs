@@ -32,7 +32,7 @@ where
         {
             ControlFlow::Exit
         } else {
-            ControlFlow::Wait
+            ControlFlow::Poll
         }
     })
 }
