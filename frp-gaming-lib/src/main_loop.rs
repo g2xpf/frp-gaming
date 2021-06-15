@@ -58,6 +58,15 @@ where
         let mut frame_count = 0;
         event_loop.run(move |event, _, control_flow| {
             match &event {
+                Event::NewEvents(glium::glutin::event::StartCause::Init) => {
+                    input.timer.initialize();
+                }
+                Event::MainEventsCleared => {
+                    input.timer.time_sink.send(Instant::now());
+                    input.timer.tick_sink.send(frame_count);
+
+                    display.gl_window().window().request_redraw();
+                }
                 Event::RedrawRequested(_) => {
                     let drawers = drawers.sample();
                     let mut frame = display.draw();
@@ -72,12 +81,6 @@ where
                     for event_emiiter in event_emiiters {
                         event_emiiter.call(&event_loop_proxy)
                     }
-                }
-                Event::MainEventsCleared => {
-                    input.timer.time_sink.send(Instant::now());
-                    input.timer.tick_sink.send(frame_count);
-
-                    display.gl_window().window().request_redraw();
                 }
                 _ => {}
             }
