@@ -38,5 +38,8 @@ fn duration_to_color(elapsed: &Duration) -> (f32, f32, f32, f32) {
         color.2 += 1.0 - seconds;
         color.0 += seconds;
     }
+    color.0 = color.0.clamp(0.0, 1.0);
+    color.1 = color.1.clamp(0.0, 1.0);
+    color.2 = color.2.clamp(0.0, 1.0);
     color
 }
