@@ -1,0 +1,9 @@
+[workspace]
+members = [
+    "frp-gaming-lib",
+    "frp-gaming-app"
+]
+
+default-members = [
+    "frp-gaming-app"
+]
